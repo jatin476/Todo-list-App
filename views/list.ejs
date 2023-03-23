@@ -1,0 +1,66 @@
+<!-- ############# INTIAL CODE ############  -->
+
+<!-- <%- include('header'); -%>   
+
+        <div class="box" id="heading">
+            <h1></h1>  Here in the h1 kindofday will be come in ejs  
+
+        </div>
+
+        <div class="box">
+            <% for(var i = 0; i<newlistitems.length; i++){ %>
+            <div class="item">
+                <input type="checkbox" name="" id="">
+                     <p>//<%= newlistitems[i] %>   </p>
+            </div> 
+            //<% } %>
+
+
+            <form class="item" action="/" method="post" >
+                <input type="text" name="newitem" placeholder="New Item" autocomplete="off">
+                <button type="submit" name="button" value=>+</button>
+                 Here in the value kindofday will be come in ejs 
+            </form>
+        </div>
+        
+<%- include('footer'); -%>     -->
+
+
+
+
+
+<!-- ############# UPDATED CODE ############  -->
+
+
+<%- include('header'); -%>
+
+    <div class="box" id="heading">
+        <h1><%= list_name %></h1>
+
+    </div>
+
+    <div class="box">
+
+        <% newlistitems.forEach(function(item){ %>
+            <form action="/delete" method="post">
+                <div class="item">
+                    <input type="checkbox" name="checkbox" value="<%= item._id %>" onChange="this.form.submit()">
+                    <p>
+                        <%= item.name %>
+                    </p>
+                </div>
+                <input type="hidden" name="listname" value="<%= list_name %>">
+            </form>
+
+            <% }) %>
+
+
+                <form class="item" action="/" method="post">
+                    <input type="text" name="newitem" placeholder="New Item" autocomplete="off">
+                    <button type="submit" name="button"  value="<%= list_name %>">+</button>
+                </form>
+    </div>
+
+
+
+    <%- include('footer'); -%>
