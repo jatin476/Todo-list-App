@@ -214,7 +214,7 @@ app.post("/delete", function (req, res) {
 })
 
 
-
+const PORT = process.env.PORT || 3000;
 
 app.listen(3000, function () {
     console.log('server is listining at port 3000');
