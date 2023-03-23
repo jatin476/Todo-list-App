@@ -66,6 +66,8 @@ const { url } = require('inspector');
 const { dirname, resolve } = require('path');
 const { day } = require('./date')
 const mongoose = require('mongoose');
+var favicon = require('serve-favicon')
+var path = require('path')
 var _ = require('lodash');
 //let ejs = require('ejs');
 
@@ -76,6 +78,10 @@ app.set('view engine', 'ejs');
 app.use(express.urlencoded({ extended: false }));
 
 app.use(express.static('public'))
+
+// For Using Favicon 
+
+app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')))
 
 /// MONGO DB SERVER
 main().catch(err => console.log(err));
@@ -107,8 +113,8 @@ const defaultItems = [item1, item2, item3]
 
 app.get('/', function (req, res) {
 
-    Item.find().then(foundItems => {
-        if (foundItems.length === '') {
+    Item.find({}).then(foundItems => {
+        if (foundItems.length === 0) {
             Item.insertMany(defaultItems).then(resolve => {
                 console.log('defaults items saved in the in the todolistDB');
             }).catch(error => {
@@ -118,6 +124,7 @@ app.get('/', function (req, res) {
 
         } else {
             res.render('list', { newlistitems: foundItems, list_name: "Today" })
+
         }
     }).catch(error => {
         console.log(error);
@@ -135,12 +142,10 @@ const listSchema = new mongoose.Schema({
 const List = mongoose.model('List', listSchema)
 
 
-app.get('/favicon.ico', (req, res) => {
-    return 'your faveicon'
-})
 
 app.get('/:userId', (req, res) => {
     const customlistname = _.capitalize(req.params.userId);
+    console.log(customlistname);
 
     List.findOne({ name: customlistname }).then(foundlist => {
         console.log(foundlist);
@@ -204,7 +209,6 @@ app.post("/delete", function (req, res) {
         res.redirect('/');
     }else{
         List.findOneAndUpdate({name:listname},{ $pull: {listitems: {_id :checkedItemId} }}).then(foundlist=>{
-            console.log(foundlist);
             res.redirect('/'+listname);
         }).catch(err=>{
             console.log(err);
@@ -219,3 +223,7 @@ const PORT = process.env.PORT || 3000;
 app.listen(3000, function () {
     console.log('server is listining at port 3000');
 })
+
+
+
+// https://tiny-rose-angelfish-wig.cyclic.app/       link for this app 
